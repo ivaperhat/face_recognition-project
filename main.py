@@ -22,6 +22,7 @@ def add_record(name, face_encodings):
         cursor.execute(st.faces_insert_NAME_ENCODINGS, (name, pickle.dumps(face_encodings)))
         return True
 
+
 # Delete record from database
 def delete_record(face_id):
     cursor.execute(st.faces_exists_ID, face_id)
