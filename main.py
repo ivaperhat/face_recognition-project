@@ -29,10 +29,13 @@ def get_face_encodings(img):
 
 # Check if two faces match
 def face_match(img1, img2):
-    face_encodings1 = get_face_encodings(img1)
-    face_encodings2 = get_face_encodings(img2)
-    result = face_recognition.compare_faces([face_encodings1], face_encodings2)
-    return result[0]
+    if detected(img1) & detected(img2):
+        face_encodings1 = get_face_encodings(img1)
+        face_encodings2 = get_face_encodings(img2)
+        result = face_recognition.compare_faces([face_encodings1], face_encodings2)
+        return result[0]
+    else:
+        return False
 
 
 # Get 'distance' between two faces
@@ -70,7 +73,7 @@ def find_closest_match(face_encodings):
 
 
 # Add record to the database
-def add_record_w_image(name, img):
+def add_record(name, img):
     face_encodings = get_face_encodings(img)
 
     if find_match(face_encodings):  # Person is already in the database
@@ -102,6 +105,17 @@ def delete_record(face_id):
         return True
     else:
         return False
+
+
+def detected(img):
+    na_img = face_recognition.load_image_file(img)  # Load image as numpy array
+
+    try:
+        face_recognition.face_locations(na_img, number_of_times_to_upsample=1, model="hog")[0]
+    except Exception:
+        return False
+    else:
+        return True
 
 
 connection.commit()
