@@ -4,6 +4,7 @@ import pickle
 import MySQLdb
 import uuid
 import boto3
+from PIL import Image
 
 # Connect to S3 Bucket (https://www.aws.amazon.com/)
 client = boto3.client('s3',
@@ -29,7 +30,7 @@ def get_face_encodings(img):
 
 # Check if two faces match
 def face_match(img1, img2):
-    if detected(img1) & detected(img2):
+    if (crop_faces(img1) == 1) & (crop_faces(img2) == 1):
         face_encodings1 = get_face_encodings(img1)
         face_encodings2 = get_face_encodings(img2)
         result = face_recognition.compare_faces([face_encodings1], face_encodings2)
@@ -107,15 +108,20 @@ def delete_record(face_id):
         return False
 
 
-def detected(img):
-    na_img = face_recognition.load_image_file(img)  # Load image as numpy array
+def crop_faces(img):
+    count = 0
+    image = face_recognition.load_image_file(img)
+    faces = face_recognition.face_locations(image)
 
-    try:
-        face_recognition.face_locations(na_img, number_of_times_to_upsample=1, model="hog")[0]
-    except Exception:
-        return False
-    else:
-        return True
+    for i in range(len(faces)):
+        count = count + 1
+        top, right, bottom, left = faces[i]
+
+        face_img = image[top:bottom, left:right]
+        final = Image.fromarray(face_img)
+        final.save("img%s.png" % (str(i)), "PNG")
+
+    return count
 
 
 connection.commit()
