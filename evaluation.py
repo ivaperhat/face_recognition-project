@@ -3,6 +3,7 @@ from sklearn.metrics import classification_report
 import tqdm
 import matplotlib.pyplot as plt
 import main as fr
+import face_recognition
 
 lfw = fetch_lfw_pairs(subset='test', color=True, resize=1)
 
@@ -22,9 +23,12 @@ for idx in tqdm.tqdm(range(0, pairs.shape[0])):
     plt.imshow(img1 / 255)
     plt.savefig('fig2.jpg')
 
+    fig1_array = face_recognition.load_image_file('fig1.jpg')
+    fig2_array = face_recognition.load_image_file('fig2.jpg')
+
     actual = targets[idx]
 
-    result = fr.face_match('fig1.jpg', 'fig2.jpg')
+    result = fr.face_match(fig1_array, fig2_array)
     prediction = 1 if result == "True" else 0
 
     predictions.append(prediction)
