@@ -16,16 +16,12 @@ def count_faces(img_array):
     return len(faces)  # Returns the number of detected faces
 
 
-print("COUNT FACES: ")
-print(count_faces(face_recognition.load_image_file("beatles.jpg")))
-
-
 # Get face images from an image, return the number of faces found
 def crop_faces(img_array):
     images = []
     faces = face_recognition.face_locations(img_array)
 
-    for i in range(len(faces)):
+    for i in range(len(faces)):  # For each face detected
         top, right, bottom, left = faces[i]
 
         face_img = img_array[top:bottom, left:right]
@@ -35,24 +31,19 @@ def crop_faces(img_array):
         final_array = asarray(final)
         images.append(final_array)
 
+        imgt = Image.fromarray(final_array)
+        imgt.show()
+
     return images  # Returns an array list of face images
-
-
-print("CROP FACES: ")
-print(crop_faces(face_recognition.load_image_file("beatles.jpg")))
 
 
 # Get face encodings from an image
 def get_face_encodings(img_array):
-    if count_faces(img_array) == 1:
+    if count_faces(img_array) == 1:  # Check if the image only contains one face
         encodings = face_recognition.face_encodings(img_array)[0]
         return encodings
     else:
         return False
-
-
-print("GET_FACE_ENCODINGS:")
-print(get_face_encodings(face_recognition.load_image_file("miley_cyrus1.jpg")))
 
 
 # Check if two faces match
@@ -61,40 +52,27 @@ def face_match(face_encodings1, face_encodings2):
     return result[0]
 
 
-print("FACE_MATCH: ")
-print(face_match(get_face_encodings(face_recognition.load_image_file("miley_cyrus1.jpg")),
-                 get_face_encodings(face_recognition.load_image_file("miley_cyrus2.jpg"))))
-
-
 # Get 'distance' between two faces
 def face_distance(face_encodings1, face_encodings2):
     distance = face_recognition.face_distance([face_encodings1], face_encodings2)
     return distance[0]
 
 
-print("FACE_DISTANCE: ")
-print(face_distance(get_face_encodings(face_recognition.load_image_file("miley_cyrus1.jpg")),
-                    get_face_encodings(face_recognition.load_image_file("miley_cyrus2.jpg"))))
-
-
 # Search for a match in the database
-def find_match(img_array):
-    face_encodings = get_face_encodings(img_array)
+def find_match(face_encodings):
     cursor.execute(da.FACES_SELECT_ALL)
     rows = cursor.fetchall()
     match_id = ""
     for row in rows:
         if face_match(pickle.loads(row[2]), face_encodings):
             match_id = row[0]
+        if match_id != "":  # If a match is found
+            break
 
     if match_id == "":
         return False
     else:
         return match_id
-
-
-print("FIND_MATCH:")
-print(find_match(face_recognition.load_image_file("miley_cyrus1.jpg")))
 
 
 # Find match with lowest face distance
@@ -109,10 +87,6 @@ def find_closest_match(face_encodings):
             lowest_distance = current_distance
             lowest_distance_id = row[0]
     return lowest_distance_id, lowest_distance
-
-
-print("FIND_CLOSEST MATCH: ")
-print(find_closest_match(get_face_encodings(face_recognition.load_image_file("miley_cyrus1.jpg"))))
 
 
 # Add record to the database
@@ -142,10 +116,6 @@ def add_record(name, img_array):
         return False
 
 
-print("ADD_RECORD: ")
-print(add_record("Miley", face_recognition.load_image_file("miley_cyrus1.jpg")))
-
-
 # Delete record from database
 def delete_record(face_id):
     cursor.execute(da.FACES_EXISTS, (face_id,))
@@ -159,10 +129,6 @@ def delete_record(face_id):
         return True
     else:
         return False
-
-
-print("DELETE_RECORD: ")
-print(delete_record("15"))
 
 
 da.connection.commit()
