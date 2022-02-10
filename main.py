@@ -31,9 +31,6 @@ def crop_faces(img_array):
         final_array = asarray(final)
         images.append(final_array)
 
-        imgt = Image.fromarray(final_array)
-        imgt.show()
-
     return images  # Returns an array list of face images
 
 
