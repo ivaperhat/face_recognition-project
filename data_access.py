@@ -1,22 +1,22 @@
 import MySQLdb
 import boto3
 
-# Clever Cloud MySQL Database
-HOSTNAME = "b97ulbrnkhrhixtxfcii-mysql.services.clever-cloud.com"
-USER = "u52rwvwh0rmc0i50"
-PASSWORD = "33iXkQ0rI0nyTR1EQbu0"
-DATABASE = "b97ulbrnkhrhixtxfcii"
+# AWS MySQL Database
+HOSTNAME = 'faces-db.crbtdjvdgyor.eu-central-1.rds.amazonaws.com'
+USER = ''
+PASSWORD = ''
+DATABASE = ''
 
 # AWS S3 Bucket
-ACCESS_KEY = 'AKIATUBPYMZCWOIYMNGA'
-SECRET_ACCESS_KEY = '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'
+ACCESS_KEY = ''
+SECRET_ACCESS_KEY = ''
 
-# Connect to S3 Bucket (https://www.aws.amazon.com/)
+# Connect to S3 Bucket
 client = boto3.client('s3',
                       aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_ACCESS_KEY)
 
-# Connect to Database (https://www.clever-cloud.com/)
+# Connect to MySQL Database
 connection = MySQLdb.connect(host=HOSTNAME,
                              user=USER,
                              passwd=PASSWORD,
