@@ -7,7 +7,7 @@ def get_face_blob(img_path):
     img = cv2.imread(img_path)
 
     detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    faces = detector.detectMultiScale(img, 1.3, 5)
+    faces = detector.detectMultiScale(img, 1.3, 5)  # Detect face
 
     x, y, w, h = faces[0]
     detected_face = img[int(y):int(y + h), int(x):int(x + w)]
@@ -26,9 +26,9 @@ def detect_gender(img_path):
     gender_result = gender_model.forward()
 
     if np.argmax(gender_result[0]) == 0:
-        return "Woman"
+        return "F"
     else:
-        return "Man"
+        return "M"
 
 
 # Detect Age
@@ -43,7 +43,3 @@ def detect_age(img_path):
     detected_age = round(np.sum(age_result[0] * indexes))
 
     return detected_age
-
-
-print(detect_age("miley_cyrus1.jpg"))
-print(detect_gender("miley_cyrus1.jpg"))
