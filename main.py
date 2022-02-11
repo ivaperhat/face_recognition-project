@@ -10,6 +10,11 @@ from numpy import asarray
 cursor = da.connection.cursor()
 
 
+def get_img_array(img_path):
+    array = face_recognition.load_image_file(img_path)
+    return array
+
+
 # Count faces in a photo
 def count_faces(img_array):
     faces = face_recognition.face_locations(img_array)
