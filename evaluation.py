@@ -17,7 +17,7 @@ target_names = lfw.target_names
 predictions = []
 actuals = []
 
-for idx in tqdm.tqdm(range(0, 3)):
+for idx in tqdm.tqdm(range(0, pairs.shape[0])):
     pair = pairs[idx]
     img1 = pair[0]
     img2 = pair[1]
