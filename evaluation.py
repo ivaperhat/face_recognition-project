@@ -4,6 +4,7 @@ import tqdm
 import matplotlib.pyplot as plt
 import main as fr
 import face_recognition
+from PIL import Image
 
 lfw = fetch_lfw_pairs(subset='test', color=True, resize=1)
 
@@ -20,17 +21,31 @@ for idx in tqdm.tqdm(range(0, pairs.shape[0])):
     plt.imshow(img1 / 255)
     plt.savefig('fig1.jpg')
 
-    plt.imshow(img1 / 255)
+    plt.imshow(img2 / 255)
     plt.savefig('fig2.jpg')
 
     fig1_array = face_recognition.load_image_file('fig1.jpg')
     fig2_array = face_recognition.load_image_file('fig2.jpg')
 
+    prediction = False
+
+    face_encodings1 = fr.get_face_encodings(fig1_array)
+    face_encodings2 = fr.get_face_encodings(fig2_array)
+
     actual = targets[idx]
 
-    result = fr.face_match(fig1_array, fig2_array)
-    prediction = 1 if result == "True" else 0
+    if isinstance(face_encodings1, bool) or isinstance(face_encodings2, bool):
+        prediction = 0
+    else:
+        result = fr.face_match(face_encodings1, face_encodings2)
+
+        if result:
+            prediction = 1
+        else:
+            prediction = 0
 
     predictions.append(prediction)
 
-print(classification_report(targets, predictions))
+print(predictions)
+
+
