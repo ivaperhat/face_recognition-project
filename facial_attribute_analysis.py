@@ -9,12 +9,14 @@ def get_face_blob(img_path):
     detector = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     faces = detector.detectMultiScale(img, 1.3, 5)  # Detect face
 
-    x, y, w, h = faces[0]
-    detected_face = img[int(y):int(y + h), int(x):int(x + w)]
-    detected_face = cv2.resize(detected_face, (224, 224))
-    detected_face_blob = cv2.dnn.blobFromImage(detected_face)
-
-    return detected_face_blob
+    if len(faces) == 1:  # If one face was detected
+        x, y, w, h = faces[0]
+        detected_face = img[int(y):int(y + h), int(x):int(x + w)]
+        detected_face = cv2.resize(detected_face, (224, 224))
+        detected_face_blob = cv2.dnn.blobFromImage(detected_face)
+        return detected_face_blob
+    else:
+        return False
 
 
 # Detect Gender
