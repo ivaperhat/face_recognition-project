@@ -17,6 +17,7 @@ target_names = lfw.target_names
 predictions = []
 actuals = []
 
+
 # Get predictions for LFW pairs using face_match() function
 def get_predictions():
     for idx in tqdm.tqdm(range(0, pairs.shape[0])):
@@ -83,6 +84,7 @@ def run_tests(actuals_array, predictions_array):
     print("true positive: ", tp)
     print("false positive: ", fp)
     print("false negative: ", fn)
+
 
 # Run Tests
 run_tests(np.array(get_actuals()), np.array(get_predictions()))
