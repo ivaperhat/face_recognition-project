@@ -5,6 +5,7 @@ import re
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+gender_regex = "^[fm]{1}$"
 prefix_txt = "landmarks."
 prefix_img = "coarse_tilt_aligned_face."
 cwd = os.getcwd()+"/"
@@ -34,7 +35,7 @@ def return_five_cross_validation(textfile):
         # real image path from folder
         img_path = line[0]+"/"+prefix_img+line[2]+"."+line[1]
         landmark_txt_path = line[0]+"/"+prefix_txt+line[2]+"."+line[1][:-3]+"txt"
-        if line[3] == "None" or not(re.match(line[4], r"f|m")):
+        if line[3] == "None" or (re.match(gender_regex, line[4]) is None):
             none_count += 1
             continue
         else:
@@ -132,3 +133,5 @@ def run_tests(actuals_list, predictions_list):
     f1 = 100 * f1_score(actuals_list, predictions_list)
 
     return accuracy, precision, recall, f1
+
+print(gender_actuals())
