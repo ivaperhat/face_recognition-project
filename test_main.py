@@ -1,6 +1,7 @@
 from unittest import TestCase
 import main as fr
 import face_recognition
+import facial_attribute_analysis as fae
 
 
 class Test(TestCase):
@@ -25,3 +26,11 @@ class Test(TestCase):
                                          fr.get_face_encodings(fr.get_img_array("miley_cyrus2.jpg"))), 0.6)
         self.assertGreater(fr.face_distance(fr.get_face_encodings(fr.get_img_array("miley_cyrus1.jpg")),
                                             fr.get_face_encodings(fr.get_img_array("zendaya1.jpg"))), 0.6)
+
+    def test_gender_detection(self):
+        self.assertEqual(fae.detect_gender("zendaya1.jpg"), 'f')
+        self.assertEqual(fae.detect_gender("leonardo_dicaprio.jpg"), 'm')
+
+    def test_age_detection(self):
+        self.assertLess(fae.detect_age("zendaya3.jpg"), 30)
+        self.assertGreater(fae.detect_age("leonardo_dicaprio.jpg"), 30)
