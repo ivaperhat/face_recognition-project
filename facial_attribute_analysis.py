@@ -23,25 +23,31 @@ def get_face_blob(img_path):
 def detect_gender(img_path):
     detected_face_blob = get_face_blob(img_path)
 
-    gender_model = cv2.dnn.readNetFromCaffe("gender.prototxt", "gender.caffemodel")
-    gender_model.setInput(detected_face_blob)
-    gender_result = gender_model.forward()
-
-    if np.argmax(gender_result[0]) == 0:
-        return "F"
+    if isinstance(detected_face_blob, bool):
+        return False
     else:
-        return "M"
+        gender_model = cv2.dnn.readNetFromCaffe("gender.prototxt", "gender.caffemodel")
+        gender_model.setInput(detected_face_blob)
+        gender_result = gender_model.forward()
+
+        if np.argmax(gender_result[0]) == 0:
+            return "f"
+        else:
+            return "m"
 
 
 # Detect Age
 def detect_age(img_path):
     detected_face_blob = get_face_blob(img_path)
 
-    age_model = cv2.dnn.readNetFromCaffe("age.prototxt", "dex_chalearn_iccv2015.caffemodel")
-    age_model.setInput(detected_face_blob)
-    age_result = age_model.forward()
+    if isinstance(detected_face_blob, bool):
+        return False
+    else:
+        age_model = cv2.dnn.readNetFromCaffe("age.prototxt", "dex_chalearn_iccv2015.caffemodel")
+        age_model.setInput(detected_face_blob)
+        age_result = age_model.forward()
 
-    indexes = np.array([i for i in range(0, 101)])
-    detected_age = round(np.sum(age_result[0] * indexes))
+        indexes = np.array([i for i in range(0, 101)])
+        detected_age = round(np.sum(age_result[0] * indexes))
 
-    return detected_age
+        return detected_age
