@@ -7,6 +7,7 @@ import face_recognition
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import evaluation_tests as test
 
 
 lfw = fetch_lfw_pairs(subset='test', color=True, resize=1)
