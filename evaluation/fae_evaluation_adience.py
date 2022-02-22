@@ -1,9 +1,10 @@
 import os
 import tqdm
-import fae.facial_attribute_analysis as fae
+import face_analysis.facial_attribute_analysis as fae
 import re
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import evaluation_tests as tests
 
 gender_regex = "^[fm]{1}$"
 prefix_txt = "landmarks."
@@ -170,33 +171,33 @@ male_predictions = get_bool_list('m', new_gender_predictions)
 male_actuals = get_bool_list('m', new_gender_actuals)
 
 print("GENDER PREDICTION EVALUATION: MALE")
-print("true negative:", get_confusion_matrix(male_actuals, male_predictions)[0])
-print("true positive:", get_confusion_matrix(male_actuals, male_predictions)[1])
-print("false positive:", get_confusion_matrix(male_actuals, male_predictions)[2])
-print("false negative:", get_confusion_matrix(male_actuals, male_predictions)[3])
-print("ACCURACY:", run_tests(male_actuals, male_predictions)[0])
-print("PRECISION:", run_tests(male_actuals, male_predictions)[1])
-print("RECALL:", run_tests(male_actuals, male_predictions)[2])
-print("F1:", run_tests(male_actuals, male_predictions)[3])
+print("true negative:", tests.get_confusion_matrix(male_actuals, male_predictions)[0])
+print("true positive:", tests.get_confusion_matrix(male_actuals, male_predictions)[1])
+print("false positive:", tests.get_confusion_matrix(male_actuals, male_predictions)[2])
+print("false negative:", tests.get_confusion_matrix(male_actuals, male_predictions)[3])
+print("ACCURACY:", tests.run_tests(male_actuals, male_predictions)[0])
+print("PRECISION:", tests.run_tests(male_actuals, male_predictions)[1])
+print("RECALL:", tests.run_tests(male_actuals, male_predictions)[2])
+print("F1:", tests.run_tests(male_actuals, male_predictions)[3])
 
 # Evaluate female prediction
 female_predictions = get_bool_list('f', new_gender_predictions)
 female_actuals = get_bool_list('f', new_gender_actuals)
 
 print("\nGENDER PREDICTION EVALUATION: FEMALE")
-print("true negative:", get_confusion_matrix(female_actuals, female_predictions)[0])
-print("true positive:", get_confusion_matrix(female_actuals, female_predictions)[1])
-print("false positive:", get_confusion_matrix(female_actuals, female_predictions)[2])
-print("false negative:", get_confusion_matrix(female_actuals, female_predictions)[3])
-print("ACCURACY:", run_tests(female_actuals, female_predictions)[0])
-print("PRECISION:", run_tests(female_actuals, female_predictions)[1])
-print("RECALL:", run_tests(female_actuals, female_predictions)[2])
-print("F1:", run_tests(female_actuals, female_predictions)[3])
+print("true negative:", tests.get_confusion_matrix(female_actuals, female_predictions)[0])
+print("true positive:", tests.get_confusion_matrix(female_actuals, female_predictions)[1])
+print("false positive:", tests.get_confusion_matrix(female_actuals, female_predictions)[2])
+print("false negative:", tests.get_confusion_matrix(female_actuals, female_predictions)[3])
+print("ACCURACY:", tests.run_tests(female_actuals, female_predictions)[0])
+print("PRECISION:", tests.run_tests(female_actuals, female_predictions)[1])
+print("RECALL:", tests.run_tests(female_actuals, female_predictions)[2])
+print("F1:", tests.run_tests(female_actuals, female_predictions)[3])
 
 new_age_predictions = remove_failed_items(age_predictions, age_predictions)
 new_age_actuals = remove_failed_items(age_predictions, age_actuals)
 
 print("\nAGE PREDICTION EVALUATION:")
-print("MAE:", mean_absolute_error(new_age_actuals, new_age_predictions)[0])
-print("CORRECTLY CLASSIFIED:", mean_absolute_error(new_age_actuals, new_age_predictions)[1])
+print("MAE:", tests.mean_absolute_error(new_age_actuals, new_age_predictions)[0])
+print("CORRECTLY CLASSIFIED:", tests.mean_absolute_error(new_age_actuals, new_age_predictions)[1])
 

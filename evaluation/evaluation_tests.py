@@ -1,12 +1,14 @@
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
+
 # Compare lists to print confusion matrix
 def get_confusion_matrix(actuals_list, predictions_list):
     cm = confusion_matrix(actuals_list, predictions_list)
     tn, fp, fn, tp = cm.ravel()
 
     return tn, tp, fp, fn
+
 
 # Test for: accuracy, precision, recall, f1
 def run_tests(actuals_list, predictions_list):
@@ -16,6 +18,7 @@ def run_tests(actuals_list, predictions_list):
     f1 = 100 * f1_score(actuals_list, predictions_list)
 
     return accuracy, precision, recall, f1
+
 
 def mean_absolute_error(actuals_list, predictions_list):
     index = 0

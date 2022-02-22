@@ -2,13 +2,12 @@ from sklearn.datasets import fetch_lfw_pairs
 import tqdm
 import os
 import matplotlib.pyplot as plt
-import recognition.recognition_functions as fr
+import face_analysis.recognition_functions as fr
 import face_recognition
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import evaluation_tests as tests
-
 
 lfw = fetch_lfw_pairs(subset='test', color=True, resize=1)
 
@@ -65,27 +64,6 @@ def get_actuals():
     return actuals
 
 
-def run_tests(actuals_array, predictions_array):
-    # Test for: accuracy, precision, recall, f1
-    accuracy = 100 * accuracy_score(actuals_array, predictions_array)
-    precision = 100 * precision_score(actuals_array, predictions_array)
-    recall = 100 * recall_score(actuals_array, predictions_array)
-    f1 = 100 * f1_score(actuals_array, predictions_array)
-
-    print("accuracy: ", accuracy)
-    print("precision: ", precision)
-    print("recall: ", recall)
-    print("f1 =", f1)
-
-    # Test for: true negatives, true positives, false positives, false negatives
-    cm = confusion_matrix(actuals_array, predictions_array)
-    tn, fp, fn, tp = cm.ravel()
-
-    print("true negative: ", tn)
-    print("true positive: ", tp)
-    print("false positive: ", fp)
-    print("false negative: ", fn)
-
-
 # Run Tests
-run_tests(np.array(get_actuals()), np.array(get_predictions()))
+print(tests.get_confusion_matrix(get_actuals(), get_predictions()))
+print(tests.run_tests(get_actuals(), get_predictions()))

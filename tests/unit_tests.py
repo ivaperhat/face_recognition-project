@@ -1,7 +1,7 @@
 from unittest import TestCase
 import face_recognition
-import recognition.recognition_functions as fr
-import fae.facial_attribute_analysis as fae
+import face_analysis.recognition_functions as fr
+import face_analysis.facial_attribute_analysis as fae
 
 
 class Test(TestCase):
