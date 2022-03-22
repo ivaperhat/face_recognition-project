@@ -236,20 +236,3 @@ if __name__ == '__main__':
     cv2.destroyAllWindows()
 
     cv2.destroyWindow(previewName)
-
-# Load names and encodings from the database
-known_face_names = records.db_data()[0]
-known_face_encodings = records.db_data()[1]
-
-print(len(known_face_names), len(known_face_encodings))
-
-# Create threads as follows
-thread1 = camThread("Camera 1", 0)
-#thread2 = camThread("Camera 2", 1)
-
-thread1.start()
-#thread2.start()
-
-print("Active threads", threading.activeCount())
-
-# conn.connection.close()
