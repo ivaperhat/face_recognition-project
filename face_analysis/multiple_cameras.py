@@ -234,5 +234,3 @@ if __name__ == '__main__':
 
     # closing all windows
     cv2.destroyAllWindows()
-
-    cv2.destroyWindow(previewName)
