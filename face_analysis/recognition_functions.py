@@ -5,14 +5,14 @@ import face_recognition
 import pickle
 from PIL import Image
 from numpy import asarray
+import data_access.SQL_statements as st
 
 # Create a cursor for interacting
 cursor = da.connection.cursor()
 
 
 def get_img_array(img_path):
-    array = face_recognition.load_image_file(img_path)
-    return array
+    return face_recognition.load_image_file(img_path)
 
 
 # Count faces in a photo
@@ -62,7 +62,7 @@ def face_distance(face_encodings1, face_encodings2):
 
 # Search for a match in the database
 def find_match(face_encodings):
-    cursor.execute(da.FACES_SELECT_ALL)
+    cursor.execute(st.FACES_SELECT_ALL)
     rows = cursor.fetchall()
     match_id = ""
     for row in rows:
@@ -81,7 +81,7 @@ def find_match(face_encodings):
 def find_closest_match(face_encodings):
     lowest_distance = 1
     lowest_distance_id = ""
-    cursor.execute(da.FACES_SELECT_ALL)
+    cursor.execute(st.FACES_SELECT_ALL)
     rows = cursor.fetchall()
     for row in rows:
         current_distance = face_distance(pickle.loads(row[2]), face_encodings)
@@ -107,7 +107,7 @@ def add_record(name, img_array):
             new_img.save("saving.jpg")
 
             # Add record to the MySQL database
-            cursor.execute(da.FACES_INSERT, (name, pickle.dumps(face_encodings), unique_id))
+            cursor.execute(st.FACES_INSERT, (name, pickle.dumps(face_encodings), unique_id))
             # Add photo to the S3 bucket
             da.client.upload_file("saving.jpg", bucket_name, key,
                                   ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'})
@@ -120,18 +120,14 @@ def add_record(name, img_array):
 
 # Delete record from database
 def delete_record(face_id):
-    cursor.execute(da.FACES_EXISTS, (face_id,))
+    cursor.execute(st.FACES_EXISTS, (face_id,))
     if cursor.fetchone()[0] == 1:  # If record exists
-        cursor.execute(da.FACES_SELECT_IMG, (face_id,))
+        cursor.execute(st.FACES_SELECT_IMG, (face_id,))
         img_id = cursor.fetchone()[0]
         key = "faces/" + img_id + ".jpg"
 
-        cursor.execute(da.FACES_DELETE_RECORD, (face_id,))  # Delete database record
+        cursor.execute(st.FACES_DELETE_RECORD, (face_id,))  # Delete database record
         da.client.delete_object(Bucket='faces-db-bucket', Key=key)  # Delete photo file
         return True
     else:
         return False
-
-
-da.connection.commit()
-da.connection.close()

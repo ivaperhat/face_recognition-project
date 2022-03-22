@@ -222,10 +222,6 @@ if __name__ == '__main__':
             frame_delay = "frame delay: " + str(datetime.now() - time_read)
             time_text = "time: " + str(time_read)
 
-            # h, w, c = frame.shape
-            # print('width:  ', w, 'height: ', h)
-            # Current: 640w x 480h
-
             position = (0, 20)
             cv2.putText(frame, time_text, (5, 20), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
             cv2.putText(frame, frame_delay, (5, 40), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1)
