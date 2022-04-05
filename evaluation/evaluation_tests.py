@@ -19,7 +19,7 @@ def run_tests(actuals_list, predictions_list):
 
     return accuracy, precision, recall, f1
 
-
+# Calculate MAE
 def mean_absolute_error(actuals_list, predictions_list):
     index = 0
     sum = 0

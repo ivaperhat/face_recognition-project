@@ -2,12 +2,8 @@ from sklearn.datasets import fetch_lfw_pairs
 import tqdm
 import os
 import matplotlib.pyplot as plt
-import face_analysis.recognition_functions as fr
 import face_recognition
-import numpy as np
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import evaluation_tests as tests
+import evaluation.evaluation_tests as tests
 
 lfw = fetch_lfw_pairs(subset='test', color=True, resize=1)
 
@@ -33,14 +29,14 @@ def get_predictions():
         fig1_array = face_recognition.load_image_file('fig1.jpg')
         fig2_array = face_recognition.load_image_file('fig2.jpg')
 
-        face_encodings1 = fr.get_face_encodings(fig1_array)
-        face_encodings2 = fr.get_face_encodings(fig2_array)
+        face_encodings1 = face_recognition.face_encodings(fig1_array)
+        face_encodings2 = face_recognition.face_encodings(fig2_array)
+
 
         if isinstance(face_encodings1, bool) or isinstance(face_encodings2, bool):
             prediction = False
         else:
-            result = fr.face_match(face_encodings1, face_encodings2)
-
+            result = face_recognition.compare_faces(face_encodings1, face_encodings2[0])[0]
             if result:
                 prediction = True
             else:
@@ -64,6 +60,6 @@ def get_actuals():
     return actuals
 
 
-# Run Tests
+# Print Test Results
 print(tests.get_confusion_matrix(get_actuals(), get_predictions()))
 print(tests.run_tests(get_actuals(), get_predictions()))

@@ -1,6 +1,17 @@
 # MySQL Statements
+# MySQL Statements
+GET_FACE_RECORD = "SELECT name, face_encodings, img_id, age, gender FROM faces.faces where face_id = %s"
 FACES_SELECT_ALL = "SELECT * FROM faces"
 FACES_SELECT_IMG = "SELECT img_id FROM faces WHERE face_id = %s"
 FACES_DELETE_RECORD = "DELETE FROM faces WHERE face_id = %s"
-FACES_INSERT = "INSERT INTO faces (name, face_encodings, img_id) VALUES (%s, %s, %s)"
+FACES_INSERT = "INSERT INTO faces (face_id, name, face_encodings, img_id, age, gender) VALUES (%s, %s, %s, %s, %s, %s)"
 FACES_EXISTS = "SELECT EXISTS(SELECT * FROM faces WHERE face_id = %s)"
+VISITS_SELECT_ALL = "SELECT visit_id, face_id, time FROM faces.visits ORDER BY time DESC;"
+VISITS_SELECT_ALL = "SELECT visits.visit_id, visits.face_id, visits.time, faces.face_encodings, faces.name FROM faces.visits as visits JOIN faces.faces as faces ON visits.face_id = faces.face_id ORDER BY visits.visit_id DESC;"
+VISITS_SELECT_ALL = "SELECT visits.visit_id, visits.time, visits.face_id, faces.name, faces.face_encodings FROM faces.visits as visits JOIN faces.faces as faces ON visits.face_id = faces.face_id ORDER BY visits.visit_id DESC;"
+VISITS_INSERT = "INSERT INTO visits (face_id, time) VALUES (%s, %s)"
+RECENT_VISITORS = "SELECT faces.face_id, faces.name, faces.face_encodings, visits.time FROM faces.faces as faces JOIN (SELECT * FROM faces.visits WHERE time > DATE_SUB(NOW(), INTERVAL 10 MINUTE)) as visits ON faces.face_id = visits.face_id;"
+TOP_TEN_VISITORS = "SELECT faces.face_id, faces.name, faces.face_encodings FROM faces.faces as faces JOIN (SELECT visits.face_id, COUNT(*) as visits FROM faces.visits GROUP BY face_id ORDER BY visits DESC LIMIT 10) AS visits ON faces.face_id = visits.face_id"
+DELETE_VISITS_BY_ID = "DELETE FROM faces.visits WHERE face_id = %s;"
+SET_NAME = "UPDATE faces.faces SET name = %s WHERE (face_id = %s);"
+DELETE_ALL_VISIT_RECORDS = "TRUNCATE TABLE faces.visits;"
